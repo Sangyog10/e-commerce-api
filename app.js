@@ -41,7 +41,11 @@ app.use(xss());
 app.use(mongoSanitize());
 
 app.use(express.json());
-app.use(cookieParser(process.env.JWT_SECRET));
+app.use(
+  cookieParser(process.env.jwtSecret, {
+    signed: true,
+  })
+);
 
 app.use(express.static("./public"));
 app.use(fileUpload());
@@ -58,7 +62,7 @@ app.use(errorHandlerMiddleware);
 const port = process.env.PORT || 5000;
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI);
+    await connectDB(process.env.MONGO_URL);
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
@@ -68,9 +72,3 @@ const start = async () => {
 };
 
 start();
-
-// .env files
-// MONGO_URI=mongodb+srv://(mero email):7pt0Yqoo0ypP3Qau@task-manager.scyasr4.mongodb.net/Ecommerce?retryWrites=true&w=majority
-// PORT=3000
-// jwtSecret=ldflaksdflakdfasfkasfdlasfdkaslkfhadogf
-// expiresIn=1d
